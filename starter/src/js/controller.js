@@ -2,17 +2,9 @@ import * as model from './model.js';
 import recipeView from './views/recipeView.js';
 
 import 'core-js/stable';
-import 'regenerator-runtime/runtime'; // polyfills async await
+// import 'regenerator-runtime/runtime'; // polyfills async await
 
 const recipeContainer = document.querySelector('.recipe');
-
-const timeout = function (s) {
-  return new Promise(function (_, reject) {
-    setTimeout(function () {
-      reject(new Error(`Request took too long! Timeout after ${s} second`));
-    }, s * 1000);
-  });
-};
 
 // https://forkify-api.herokuapp.com/v2
 
@@ -31,7 +23,7 @@ const controlRecipe = async function () {
     // 2) rendering Recipe
 
     recipeView.render(model.state.recipe); // render from default class
-    //if we exported the hole class
+    //if we exported the hole file
     // -> const recipeView = new RecipeView(nodel.state.recipe)
   } catch (error) {
     alert(error);
@@ -40,12 +32,8 @@ const controlRecipe = async function () {
 
 controlRecipe();
 
-// listen for the # change event
-/*
-window.addEventListener('hashchange', controlRecipe);
-window.addEventListener('load', showRecipe);*/
+const init = function () {
+  recipeView.addHandlerRender(controlRecipe);
+};
 
-// when you have more than one event fired
-['hashchange', 'load'].forEach(event =>
-  window.addEventListener(event, controlRecipe)
-);
+init();

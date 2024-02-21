@@ -1,4 +1,6 @@
 import { async } from 'regenerator-runtime';
+import { API_URL } from './config.js';
+import { getJSON  } from './helpers.js';
 
 // the controller.js will take out the recipe out of there
 export const state = {
@@ -7,21 +9,13 @@ export const state = {
 
 console.log(state.recipe);
 
-
-
 // responsble for fetching recipe data from ipa server
 // this function will not return anything, it will only  change the state object
 export const loadRecipe = async function (id) {
   try {
-    const response = await fetch(
-      `https://forkify-api.herokuapp.com/api/v2/recipes/${id}` // insert the id here
-    );
 
-    const data = await response.json();
+    const data = await getJSON(`${API_URL}/${id}`);
 
-    if (!response.ok) {
-      throw new Error(` error: ${data.message} status: (${data.status} )`);
-    }
 
     // get rid of underscores in the object data
     const { recipe } = data.data;
@@ -35,10 +29,7 @@ export const loadRecipe = async function (id) {
       cookingTime: recipe.cooking_time,
       ingredients: recipe.ingredients,
     };
-
-
-
   } catch (error) {
-    alert(error);
+    console.error(`${error}🧨🧨`);
   }
 };
