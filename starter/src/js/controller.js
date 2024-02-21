@@ -1,7 +1,9 @@
 import * as model from './model.js';
 import recipeView from './views/recipeView.js';
+import searchView from './views/searchView.js';
 
 import 'core-js/stable';
+import searchView from './views/searchView.js';
 // import 'regenerator-runtime/runtime'; // polyfills async await
 
 const recipeContainer = document.querySelector('.recipe');
@@ -26,14 +28,30 @@ const controlRecipe = async function () {
     //if we exported the hole file
     // -> const recipeView = new RecipeView(nodel.state.recipe)
   } catch (error) {
-    alert(error);
+    recipeView.renderError();
   }
 };
 
-controlRecipe();
+const controlSearchResults = async function () {
+  try {
+    // 1.get query
+    const query = searchView.getQuery();
+    if (!query) return;
+
+    // 2. load search
+    await model.loadSearchResults(query);
+    
+    // 3.  render load results
+    console.log(model.state.search.results);
+   
+  } catch (err) {
+    console.log(err);
+  }
+};
 
 const init = function () {
   recipeView.addHandlerRender(controlRecipe);
+  searchView.addHandlerSearch(controlSearchResults);
 };
 
 init();

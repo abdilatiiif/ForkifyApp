@@ -1,24 +1,57 @@
+import View from './View.js';
+
 import icons from 'url:../../img/icons.svg'; // use url for img, audio and video
 import { fraction } from 'fractional';
 
 class RecipeView {
-  #parentElement = document.querySelector('.recipe');
-  #data;
+  _parentElement = document.querySelector('.recipe');
+  _data;
+  _errorMessage = 'Kunne ikke finne oppskrift, vennligst prøv noe annet.';
+  _message = '';
+
   render(data) {
     this.data = data;
-    const markup = this.#generateMarkup();
+    const markup = this._generateMarkup();
     //before we insert new markup, we need to get rid of the markup that was inserted before
-    this.#clear();
+    this._clear();
     // insert the result into the DOM
-    this.#parentElement.insertAdjacentHTML('afterbegin', markup);
+    this._parentElement.insertAdjacentHTML('afterbegin', markup);
   }
 
-  #clear() {
-    this.#parentElement.innerHTML = '';
+  _clear() {
+    this._parentElement.innerHTML = '';
+  }
+
+  renderError(message = this._errorMessage) {
+    const markup = `<div class="error">
+      <div>
+        <svg>
+          <use href="${icons}#icon-alert-triangle"></use>
+        </svg>
+      </div>
+      <p>${message}</p>
+  </div>`;
+
+    this._clear();
+    this._parentElement.insertAdjacentHTML('afterbegin', markup);
+  }
+
+  renderMassage(message = this._message) {
+    const markup = `<div class="message">
+      <div>
+        <svg>
+          <use href="${icons}#icon-smile"></use>
+        </svg>
+      </div>
+      <p>${message}</p>
+  </div>`;
+
+    this._clear();
+    this._parentElement.insertAdjacentHTML('afterbegin', markup);
   }
 
   // render a Spinner
-  renderSpinner = function () {
+  renderSpinner() {
     const markup = `
     <div class="spinner">
             <svg>
@@ -27,11 +60,11 @@ class RecipeView {
           </div>
     `;
 
-    this.#parentElement.innerHTML = '';
-    this.#parentElement.insertAdjacentHTML('afterbegin', markup);
-  };
+    this._parentElement.innerHTML = '';
+    this._parentElement.insertAdjacentHTML('afterbegin', markup);
+  }
 
-  #generateMarkup() {
+  _generateMarkup() {
     return `
       <figure class="recipe__fig">
         <img src="${this.data.image}" alt="${
@@ -90,7 +123,7 @@ class RecipeView {
       <div class="recipe__ingredients">
         <h2 class="heading--2">Recipe ingredients</h2>
         <ul class="recipe__ingredient-list">
-   ${this.data.ingredients.map(this.#generateMarkupIngredient).join('')}
+   ${this.data.ingredients.map(this._generateMarkupIngredient).join('')}
       </ul>
       </div>
 
@@ -123,7 +156,7 @@ class RecipeView {
     );
   }
 
-  #generateMarkupIngredient(ing) {
+  _generateMarkupIngredient(ing) {
     return ` 
      <li class="recipe__ingredient">
         <svg class="recipe__icon">
