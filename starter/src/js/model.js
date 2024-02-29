@@ -6,9 +6,9 @@ import { getJSON } from './helpers.js';
 export const state = {
   recipe: {},
   search: {
-  query: '',
-  results: [],
- }
+    query: '',
+    results: [],
+  },
 };
 
 // responsble for fetching recipe data from ipa server
@@ -35,28 +35,23 @@ export const loadRecipe = async function (id) {
   }
 };
 
-//  search for a recipe 
-export const loadSearchResults = async function(query) {
+//  search for a recipe
+export const loadSearchResults = async function (query) {
   try {
-
     state.search.query = query;
     const data = await getJSON(`${API_URL}?search=${query}`);
     console.log(data);
 
-   state.search.results = data.data.recipes.map(rec => {
-
-    return {
-      id: rec.id,
-      title: rec.title,
-      publisher: rec.publisher,
-      image: rec.image_url,
-    }
-
-    })
-
-
+    state.search.results = data.data.recipes.map(rec => {
+      return {
+        id: rec.id,
+        title: rec.title,
+        publisher: rec.publisher,
+        image: rec.image_url,
+      };
+    });
   } catch (err) {
     console.err(`${err}🧨🧨`);
     throw err;
   }
-}
+};
