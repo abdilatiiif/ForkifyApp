@@ -1,8 +1,7 @@
 import icons from 'url:../../img/icons.svg'; // use url for img, audio and video
 
 export default class View {
-  
-    _data;
+  _data;
 
   render(data) {
     this._data = data;
